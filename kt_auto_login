@@ -1,0 +1,62 @@
+<?php
+session_start(); 
+if (! isset($_SERVER['HTTPS']) or $_SERVER['HTTPS'] == 'off' ) {
+
+	$redirect_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+	header("Location: $redirect_url");
+
+	exit();}
+	include('inc/myconnect.php'); 
+	include('inc/function.php');
+	$sql="SELECT * FROM project WHERE id=1";
+	$result_min=mysqli_query($dbc,$sql);          
+	while($row = mysqli_fetch_array($result_min,MYSQLI_ASSOC)) 
+	{  
+		$job = $row['job'];
+		$web = $row['web'];
+		$company = $row['company'];
+	} 
+
+	function auto_login($id,$username,$role) {
+      $_SESSION['id']=$id;	
+		  $_SESSION['username']=$username;		
+		  $tachcheckrole=explode(',',$role);
+		  $demthay=1;
+		  foreach ($tachcheckrole as $tachcheckrole_it) {
+			  if($demthay==2){
+				  $tachcheckrole2=explode('-',$tachcheckrole_it);}
+				  $demthay++;   
+
+			}   			
+			if(!empty($tachcheckrole2[1]))					  		 			
+				header('Location:'.$tachcheckrole2[1]);		 	  
+    }
+              
+	if(isset ($_COOKIE["cookie_name"]) )
+	{ 
+		parse_str($_COOKIE['cookie_name']);
+
+		$usr=$usr;
+
+		$query = "SELECT * FROM users WHERE username ='{$usr}' AND status=1 ";
+
+		$result = mysqli_query($dbc, $query);  
+
+		kt_query($result,$query);
+
+		while ($ex=mysqli_fetch_array($result,MYSQLI_ASSOC)) {
+
+			$coki=  $ex["hash"];  
+
+			$id = $ex["id"];  
+
+			$username =	$ex["username"];  
+
+			$role =	$ex["role"];  		
+		}
+		if($coki == $_COOKIE["cookie_name"] ){
+			auto_login($id,$username,$role);		
+			}
+		} 
+		?>
