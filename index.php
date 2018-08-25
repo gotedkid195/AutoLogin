@@ -1,5 +1,5 @@
 <?php
-include('login.php');	
+include('kt_auto_login.php');	
 ?>
 <!DOCTYPE html>
 
